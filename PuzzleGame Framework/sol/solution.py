@@ -9,18 +9,66 @@
 
 # here you need to implement the Iterative Deepening Search Method
 def iterativeDeepening(puzzle):
-    # puzzle = 1D list of current state
+    # Movement lookup table
+    movement = {
+        0: [1, 3],
+        1: [0, 2, 4],
+        2: [1, 5],
+        3: [0, 4, 6],
+        4: [1, 3, 5, 7],
+        5: [2, 4, 8],
+        6: [3, 7],
+        7: [4, 6, 8],
+        8: [5, 7]
+    }
 
-    # Create movement table
-    # 1. Where "8" appears
-    # 2. All the next possible new possitions for "8"
-    movement = [][]
-    movement[0] = [1,3]
-    movement[4] = [1,3,5,7]
+    start = tuple(puzzle)
+    goal = (0, 1, 2, 3, 4, 5, 6, 7, 8)
 
-    # The sequence of "8" positions
-    path = [] # Shortest path
-    return path
+    if start == goal:
+        return []
+
+    # Generate child states
+    def expand(state):
+        s = list(state)
+        pos8 = s.index(8)
+        children = []
+
+        for nxt in movement[pos8]:
+            new_s = s[:]
+            new_s[pos8], new_s[nxt] = new_s[nxt], new_s[pos8]
+
+            # store (state, new position of 8)
+            children.append((tuple(new_s), nxt))
+
+        return children
+
+    def dls(limit):
+        # (state, path_of_positions, depth)
+        stack = [(start, [], 0)]
+        visited = set()
+
+        while stack:
+            state, path, depth = stack.pop()
+            visited.add(state)
+
+            if state == goal:
+                return path
+
+            if depth < limit:
+                for child_state, pos8_new in expand(state):
+                    if child_state not in visited:
+                        stack.append((child_state, path + [pos8_new], depth + 1))
+
+        return None
+
+    # Iterative Deepening Loop
+    for limit in range(40):
+        result = dls(limit)
+        if result is not None:
+            return result
+
+    return []
 
 def astar(puzzle):
     list = []
