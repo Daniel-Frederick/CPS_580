@@ -34,15 +34,18 @@ def iterativeDeepening(puzzle):
         pos8 = s.index(8)
         children = []
 
-        for nxt in movement[pos8]:
+        for next in movement[pos8]:
             new_s = s[:]
-            new_s[pos8], new_s[nxt] = new_s[nxt], new_s[pos8]
 
-            # store (state, new position of 8)
-            children.append((tuple(new_s), nxt))
+            # Swap positions
+            new_s[pos8], new_s[next] = new_s[next], new_s[pos8]
+
+            # store: (state, new position of 8)
+            children.append((tuple(new_s), next))
 
         return children
 
+    # Depth-limited Search
     def dls(limit):
         # (state, path_of_positions, depth)
         stack = [(start, [], 0)]
