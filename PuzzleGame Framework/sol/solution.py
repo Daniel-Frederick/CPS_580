@@ -109,6 +109,7 @@ def astar(puzzle):
                 distance += abs(curr_r - goal_r) + abs(curr_c - goal_c)
         return distance
 
+    # h_score: heuristic; f_score: g + h
     start_h = get_distance(start)
 
     # Priority Queue: (f_score, g_score, current_state, path_of_moves)
