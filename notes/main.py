@@ -12,8 +12,10 @@ for i in range(50):
     print(f"--------------Iteration {i} ---------------")
     for idx in range(1, 4): # Traverse all non-terminal states
         # Compute the two Q-values for the states
-        q[2 * idx] = R + gamma * v_old[idx - 1] # Left neighbor
-        q[2 * idx + 1] = R + gamma * v_old[idx + 1] # Right neighbor
+        q[2 * idx] = R + .6 * gamma * v_old[idx - 1] + .3 * gamma * v_old[idx] + .1 * gamma * v_old[idx + 1] # Left neighbor
+
+        q[2 * idx] = R + .6 * gamma * v_old[idx + 1] + .3 * gamma * v_old[idx] + .1 * gamma * v_old[idx - 1] # Right neighbor
+
         v[idx] = max(q[2 * idx], q[2 * idx + 1])
         print(f"V[{idx}]: {v[idx]}, Q({q[2*idx]}, {q[2*idx+1]})")
 
