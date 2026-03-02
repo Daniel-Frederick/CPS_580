@@ -58,13 +58,3 @@ for i in range(300):
             if (xn, yn) == (1, 1) or (x < 0 or x > 4) or (y < 0 or y >= 2):
                 (sn, yn) = (x, y)
 
-
-
-        R = .1
-        gamma = .9
-        
-        if action works:
-            ans = R + gamma * action[idx]
-
-
-
