@@ -32,6 +32,7 @@ action = (
     (-1, 0), # Left
     (0, -1)) # Up
 
+
 # Init Policy
 pi = []
 for i in range(3):
@@ -45,16 +46,25 @@ for i in range(3):
 print(pi)
 
 # Policy Iterations
-for i in range(300):
+for i in range(100):
 
     # Policy Evaluation
     for idx in range(50):
 
         for y in range(3): # Row
             for x in range(4):
-                (xn, yn) = (x, y) + action(pi[x][y])
+                if (x, y) != (1, 1) and (x, y) != (3, 0) and (x, y) != (3, 1):
+                    (xn, yn) = (x + action[pi[y][x]][0],
+                                y + action[pi[y][x]][1])
 
-            # Is xn, yn the wall
-            if (xn, yn) == (1, 1) or (x < 0 or x > 4) or (y < 0 or y >= 2):
-                (sn, yn) = (x, y)
+                    # Is xn, yn the wall
+                    if (xn, yn) == (1, 1) or (xn < 0 or xn > 3) or (yn < 0 or yn > 2):
+                        (xn, yn) = (x, y)
+
+                    # Update v[y][x] if it's deterministic process
+                    v[y][x] = R + gamma + v_old[yn][xn]
+
+                    print(f'({y}, {x}): action {pi[y][x]}, neighbor({yn}, {xn})')
+
+        v_old = v
 
