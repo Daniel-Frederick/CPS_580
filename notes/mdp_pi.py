@@ -7,6 +7,13 @@ v = [[0, 0, 0, 1],
 
 v_old = v.copy()
 
+R = 1
+gamma = .9
+
+# 80% lands to the action direction neighbor
+probability = .8
+# 20% lands on all the other possible neighbors
+
 # Q-value object contains 4 values for actions
 class qValues:
     def __init__(self):
@@ -66,5 +73,5 @@ for i in range(100):
 
                     print(f'({y}, {x}): action {pi[y][x]}, neighbor({yn}, {xn})')
 
-        v_old = v
+        v_old = v.copy()
 
