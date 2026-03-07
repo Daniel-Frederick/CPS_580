@@ -1,34 +1,25 @@
 import random
-
-v = [[0, 0, 0, 1],
-     [0, 0, 0, -1],
-     [0, 0, 0, 0]]
+# Step 1: create state value space, Q-values
+v = [[0, 0, 0, 1], [0, 0, 0, -1], [0, 0, 0, 0]]
 v_old = []
-
 for i in range(3):
     row = v[i].copy()
     v_old.append(row)
 
 v[0][1] = 100
-print(v_old[0][1])
-
 R = 0.1
 gamma = 0.9
-
-probability = 0.8  # 80% lands to the action direction neighbor
+probability = 0.8 # 80% lands to the action direction neighbor
 # 20% lands on all the other possible neighbors
 
-# Q-value object contains 4 values for actions
 class qValues:
     def __init__(self):
         self.values = [0, 0, 0, 0]
-
     def __repr__(self):
         return f'{self.values}'
 
 # initialize Q values
 q = []
-
 for i in range(3):
     row = []
     for j in range(4):
@@ -41,7 +32,6 @@ action = ((1, 0), (0, 1), (-1, 0), (0, -1))
 
 # Initialize a policy
 pi = []
-
 for i in range(3):
     row = []
     for j in range(4):
@@ -49,46 +39,49 @@ for i in range(3):
         row.append(a)
     pi.append(row)
 
-print(pi)
-
 # Policy Iteration
-for i in range(1):
+for i in range(10):
 
     # Policy Evaluation
     for idx in range(1):
-
         for y in range(3):
             for x in range(4):
 
-                if (x, y) != (1, 1) and (x, y) != (3, 0) and (x, y) != (3, 1):
+                if (y, x) != (1, 1) and (y, x) != (0, 3) and (y, x) != (1, 3):
 
-                    (xn, yn) = (x + action[pi[y][x]][0],
-                                y + action[pi[y][x]][1])
+                    v[y][x] = R
 
-                    # find neighbor state
-                    if (xn, yn) == (1, 1) or (xn < 0 or xn > 3) or (yn < 0 or yn > 2):
-                        (xn, yn) = (x, y)
+                    for action_idx in range(4):
 
-                    val = 0
+                        (xn, yn) = (x + action[action_idx][0],
+                                    y + action[action_idx][1])
 
-                    # intended direction (80%)
-                    val += probability * v_old[yn][xn]
+                        if (xn, yn) == (1, 1) or (xn < 0 or xn > 3) or (yn < 0 or yn > 2):
+                            (xn, yn) = (x, y)
 
-                    # other directions share remaining 20%
-                    others = [a for a in range(4) if a != pi[y][x]]
-                    share = (1 - probability) / len(others)
+                        p = 0
+                        if action_idx == pi[y][x]:
+                            p = probability
+                        else:
+                            p = (1 - probability) / 3.0
 
-                    for a in others:
-                        xn2 = x + action[a][0]
-                        yn2 = y + action[a][1]
+                        v[y][x] += p * gamma * v_old[yn][xn]
 
-                        if (xn2, yn2) == (1, 1) or (xn2 < 0 or xn2 > 3) or (yn2 < 0 or yn2 > 2):
-                            xn2, yn2 = x, y
+    print('v')
+    print(v)
+    print('pi')
+    print(pi)
 
-                        val += share * v_old[yn2][xn2]
+    # Policy Improvement (max)
+    for y in range(3):
+        for x in range(4):
+            if (y, x) != (1, 1) and (y, x) != (0, 3) and (y, x) != (1, 3):
+                best_action = 0
+                best_value = q[y][x].values[0]
 
-                    v[y][x] = R + gamma * val
+                for a in range(4):
+                    if q[y][x].values[a] > best_value:
+                        best_value = q[y][x].values[a]
+                        best_action = a
 
-                    print(f'({y}, {x}): action {pi[y][x]}, neighbor({yn}, {xn}), {v[y][x]}, {v_old[yn][xn]}')
-
-print(v)
+                pi[y][x] = best_action
