@@ -206,6 +206,9 @@ class ReinforceLearning:
 
     ####################################  Needed: here are the functions you need to use  ################################################
 
+    # epsilon = e-greedy
+    # gamma = discount
+    # alpha = Learning rate
 
     # This function is similar to the "runReward()" function but without returning a reward.
     # It only update the robot position with the new input "angle1" and "angle2"
@@ -222,7 +225,7 @@ class ReinforceLearning:
 
 
     # Method 2: TD online learning based on SARSA
-    def onTDLearning(self):
+    def onTDLearning(self): # SARSA
         # You don't have to work on it for the moment
         return
 
@@ -260,7 +263,7 @@ class ReinforceLearning:
 
 
     # Method 3: TD-online learning based on Bellman operator
-    def onQLearning(self):
+    def onQLearning(self): # Bellman
         # You don't have to work on it for the moment
         return
 
