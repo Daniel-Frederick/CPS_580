@@ -240,9 +240,10 @@ class ReinforceLearning:
 
 
         # below is just an example of randomly generating angle updates
-        idx = 0
-        angle1_update = random.randint(-1, 1)
-        angle2_update = random.randint(-1, 1)
+        idx = 8
+        (angle1_update, angle2_update) = self.actions[idx]
+        # angle1_update = random.randint(-1, 1)
+        # angle2_update = random.randint(-1, 1)
 
         # if out of the range, then just make angle1_update = 0
         if angle1_update * self.unit + self.crawler.angle1 < self.angle1_range[0] or angle1_update * self.unit + self.crawler.angle1 >  self.angle1_range[1]:
@@ -251,7 +252,6 @@ class ReinforceLearning:
         # if out of the range, then just make angle2_update = 0
         if angle2_update * self.unit + self.crawler.angle2 < self.angle2_range[0] or angle2_update * self.unit + self.crawler.angle2 > self.angle2_range[1]:
             angle2_update = 0
-
 
         return idx, angle1_update, angle2_update
 
