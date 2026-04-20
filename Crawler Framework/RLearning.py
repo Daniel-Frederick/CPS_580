@@ -220,12 +220,21 @@ class ReinforceLearning:
     # Method 1: You don't need to implement this function
     def onMonteCarlo(self):
         # You need to implement this function for the project 3 part 1
+
+        # Example to pick max
+        for i in range(self.rows):
+            for j in range(self.cols * 9):
+                self.Qvalue[i][j] = random.randint(-1, 1)
+
+
+        # Apply E-greedy to give some randomness
+
         return
 
 
 
     # Method 2: TD online learning based on SARSA
-    def onTDLearning(self): # SARSA
+    def onTDLearning(self):
         # You don't have to work on it for the moment
         return
 
@@ -238,12 +247,22 @@ class ReinforceLearning:
     def chooseAction(self, r, c):
         # implementation here
 
+        # Values [-1, 1]
+        max_val = -1
+        for i in range(9):
+            if max_val < self.Qvalue[r][c * 9 + i]:
+                idx = i
+                max_val = self.Qvalue[r][c * 9 + i]
+
+
 
         # below is just an example of randomly generating angle updates
-        idx = 8
+        # idx = 8
         (angle1_update, angle2_update) = self.actions[idx]
         # angle1_update = random.randint(-1, 1)
         # angle2_update = random.randint(-1, 1)
+        
+       
 
         # if out of the range, then just make angle1_update = 0
         if angle1_update * self.unit + self.crawler.angle1 < self.angle1_range[0] or angle1_update * self.unit + self.crawler.angle1 >  self.angle1_range[1]:
@@ -254,12 +273,6 @@ class ReinforceLearning:
             angle2_update = 0
 
         return idx, angle1_update, angle2_update
-
-
-
-
-
-
 
 
     # Method 3: TD-online learning based on Bellman operator
